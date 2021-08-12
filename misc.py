@@ -1,6 +1,7 @@
 import base64
 import streamlit as st
 import pandas as pd
+import pyLHD
 
 def download_link(object_to_download, download_filename, download_link_text):
         """
@@ -33,3 +34,17 @@ def design_csv_download(design):
   design_csv_download = download_link(design_csv, 'design.csv','Download design as csv file')
   st.markdown(design_csv_download, unsafe_allow_html=True)
 
+def pandas_design(design):
+  pd_design = pd.DataFrame(design,
+                           columns=('col%d' % i for i in range(1,design.shape[1]+1)))
+  pd_design.index = pd_design.index+1
+  return pd_design
+
+def criteria_table(design):
+  criteria = {'Criteria': ['Average Absolute Correlation','Maximum Absolute Correlation',
+                           'Maximum Projection Criterion','phi_p'],
+              'Value': [pyLHD.AvgAbsCor(design),pyLHD.MaxAbsCor(design),
+                        pyLHD.MaxProCriterion(design),pyLHD.phi_p(design)]}
+  pd_criteria = pd.DataFrame(data=criteria)
+  pd_criteria.set_index('Criteria', inplace=True)
+  return st.table(pd_criteria)
