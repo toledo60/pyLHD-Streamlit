@@ -8,6 +8,7 @@ st.sidebar.title('pyLHD')
 st.sidebar.text('Latin hypercube design for Python')
 design_type = st.sidebar.selectbox('Choose Design Type:',
                                    options = ('Random Latin Hypercube Design',
+                                              'Lioness Algorithm for LHD',
                                               'Good Lattice Point Design',
                                               'Orthogonal LHD (Butler 2001)',
                                               'Orthogonal LHD (Cioppa/Lucas 2007)',
@@ -30,7 +31,35 @@ if design_type == 'Random Latin Hypercube Design':
     generated_design = pyLHD.williams_transform(pyLHD.rLHD(N,k),baseline=baseline_wt)
   else:
     generated_design = pyLHD.rLHD(N,k)
+elif design_type == 'Lioness Algorithm for LHD':
+  gendesign.markdown('<p style="color:#F64167;">Apply Lioness Algorithm to a random (N by k) Latin hypercube design</p>',
+                     unsafe_allow_html=True)
+  N = gendesign.number_input('Select number of rows: (N)',value=2,min_value=2)
+  k = gendesign.number_input('Select number of columns: (k)',value=2,min_value=2)
+  m = gendesign.number_input('Select starting lionesses agents: (m)',value=10,min_value =10,max_value=100)
+  it = gendesign.number_input('Select number of iterations to compute',value=10,min_value=10,max_value=500)
+  criteria = gendesign.selectbox('Choose optimality criteria',
+                                 options= ('phi_p','Average Absolute Correlation',
+                                           'Maximum Absolute Correlation',
+                                           'MaxProCriterion'))
+  gendesign.markdown('<p style="color:#F64167;">Options below only apply to phi_p criterion</p>',
+                     unsafe_allow_html=True)
+  p = gendesign.number_input('p: (default is 15)',value=15,min_value=1,max_value=100)
+  q = gendesign.selectbox('q: Distance Type',
+                          options=('Manhattan (q=1)',
+                                   'Euclidean (q=2)'))
+  if criteria == 'Average Absolute Correlation':
+    criteria = 'AvgAbsCor'
+  elif criteria == 'Maximum Absolute Correlation':
+    criteria = 'MaxAbsCor'
+  
+  if q == 'Manhattan (q=1)':
+    q=1
+  else:
+    q=2
     
+  generated_design = pyLHD.LA_LHD(n=N,k=k,m=m,criteria=criteria,
+                                  N=it,q=q,p=p,maxtime=10)   
 elif  design_type == 'Good Lattice Point Design':
   gendesign.markdown('<p style="color:#F64167;">Generate a (N by k) good lattice point design</p>',
                      unsafe_allow_html=True)
