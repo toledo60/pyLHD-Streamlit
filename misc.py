@@ -42,9 +42,22 @@ def pandas_design(design):
 
 def criteria_table(design):
   criteria = {'Criteria': ['Average Absolute Correlation','Maximum Absolute Correlation',
-                           'Maximum Projection Criterion','phi_p'],
+                           'Maximum Projection Criterion','phi_p',
+                           'L2 Discrepancy','L2 Star Discrepancy',
+                           'modified L2 Discrepancy',
+                           'mixture L2 Discrepancy',
+                           'symmetric L2 Discrepancy',
+                           'wrap-around L2 Discrepancy',
+                           'Centered L2 Discrepancy'],
               'Value': [pyLHD.AvgAbsCor(design),pyLHD.MaxAbsCor(design),
-                        pyLHD.MaxProCriterion(design),pyLHD.phi_p(design)]}
+                        pyLHD.MaxProCriterion(design),pyLHD.phi_p(design),
+                        pyLHD.discrepancy(design,'L2'),
+                        pyLHD.discrepancy(design,'L2_star'),
+                        pyLHD.discrepancy(design,'modified_L2'),
+                        pyLHD.discrepancy(design,'mixture_L2'),
+                        pyLHD.discrepancy(design,'symmetric_L2'),
+                        pyLHD.discrepancy(design,'wrap_around_L2'),
+                        pyLHD.discrepancy(design)]}
   pd_criteria = pd.DataFrame(data=criteria)
   pd_criteria.set_index('Criteria', inplace=True)
   return st.table(pd_criteria)
