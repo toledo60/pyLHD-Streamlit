@@ -42,6 +42,7 @@ def pandas_design(design):
 
 
 def print_criteria(design,criteria,p=15,q=1):
+  
   if criteria=='Average Absolute Correlation':
     result =  pyLHD.AvgAbsCor(design)
   elif criteria == 'Maximum Absolute Correlation':
@@ -64,6 +65,7 @@ def print_criteria(design,criteria,p=15,q=1):
     result = pyLHD.discrepancy(design,'wrap_around_L2')
   elif criteria == 'Centered L2 Discrepancy':
     result =  pyLHD.discrepancy(design)
+    
   st.markdown(f'<p style="color:#F64167;">The {criteria} of this design: {result} </p>',
               unsafe_allow_html=True)
   

@@ -177,5 +177,6 @@ submit_button = gendesign.form_submit_button(label='Generate Design')
 if submit_button:
   print_criteria(generated_design,criteria=criteria)
   st.dataframe(pandas_design(generated_design).style.format("{:3}"))
+  
   design_txt_download(pandas_design(generated_design))
   design_csv_download(pandas_design(generated_design))
