@@ -48,7 +48,7 @@ elif design_type == 'Lioness Algorithm for LHD':
   k = gendesign.number_input('Select number of columns: (k)',value=2,min_value=2)
   m = gendesign.number_input('Select starting lionesses agents: (m)',value=10,min_value =10,max_value=100)
   it = gendesign.number_input('Select number of iterations to compute',value=10,min_value=10,max_value=500)
-  criteria = gendesign.selectbox('Choose optimality criteria',
+  LA_criteria = gendesign.selectbox('Choose optimality criteria',
                                  options= ('phi_p','Average Absolute Correlation',
                                            'Maximum Absolute Correlation',
                                            'MaxProCriterion'))
@@ -58,15 +58,25 @@ elif design_type == 'Lioness Algorithm for LHD':
   q = gendesign.selectbox('q: Distance Type',
                           options=('Manhattan (q=1)',
                                    'Euclidean (q=2)'))
+  if LA_criteria == 'Average Absolute Correlation':
+    LA_criteria = 'AvgAbsCor'
+  if LA_criteria == 'Maximum Absolute Correlation':
+    LA_criteria = 'MaxAbsCor'
   
   if q == 'Manhattan (q=1)':
     q=1
   else:
     q=2
   
-  generated_design = pyLHD.LA_LHD(n=N,k=k,m=m,criteria=criteria,
+  generated_design = pyLHD.LA_LHD(n=N,k=k,m=m,criteria=LA_criteria,
                                   N=it,q=q,p=p,maxtime=10)
   
+  criteria = LA_criteria
+  if criteria == 'AvgAbsCor':
+    criteria = 'Average Absolute Correlation'
+  if criteria == 'MaxAbsCor':
+    criteria = 'Maximum Absolute Correlation'
+    
 elif design_type == 'Good Lattice Point Design':
   gendesign.markdown('<p style="color:#F64167;">Generate a (N by k) good lattice point design</p>',
                      unsafe_allow_html=True)
