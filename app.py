@@ -19,18 +19,28 @@ design_type = st.sidebar.selectbox('Choose Design Type:',
 st.sidebar.markdown('[Check out pyLHD on Github](https://github.com/toledo60/pyLHD)')
 gendesign = st.form(key = 'gendesign')
 
+criteria_options = ['Average Absolute Correlation', 'Centered L2 Discrepancy',
+                    'L2 Discrepancy', 'L2 Star Discrepancy', 'Maximum Absolute Correlation',
+                    'Maximum Projection Criterion', 'mixture L2 Discrepancy', 'modified L2 Discrepancy',
+                    'phi_p', 'symmetric L2 Discrepancy', 'wrap-around L2 Discrepancy']
+
 if design_type == 'Random Latin Hypercube Design':
   gendesign.markdown('<p style="color:#F64167;">Generate a random (N by k) Latin hypercube design</p>',
                      unsafe_allow_html=True)
   N = gendesign.number_input('Select number of rows: (N)',value=2,min_value=2)
   k = gendesign.number_input('Select number of columns: (k)',value=2,min_value=2)
+  criteria = gendesign.selectbox('Choose Criteria:',
+                                  options= criteria_options )
+    
   wt = gendesign.checkbox('Apply Williams Transformation')
+  
   if wt:
     baseline_wt = gendesign.number_input('Select baseline for Williams Transformation',value=1,
                                          min_value=0)
     generated_design = pyLHD.williams_transform(pyLHD.rLHD(N,k),baseline=baseline_wt)
   else:
     generated_design = pyLHD.rLHD(N,k)
+    
 elif design_type == 'Lioness Algorithm for LHD':
   gendesign.markdown('<p style="color:#F64167;">Apply Lioness Algorithm to a random (N by k) Latin hypercube design</p>',
                      unsafe_allow_html=True)
@@ -48,26 +58,26 @@ elif design_type == 'Lioness Algorithm for LHD':
   q = gendesign.selectbox('q: Distance Type',
                           options=('Manhattan (q=1)',
                                    'Euclidean (q=2)'))
-  if criteria == 'Average Absolute Correlation':
-    criteria = 'AvgAbsCor'
-  elif criteria == 'Maximum Absolute Correlation':
-    criteria = 'MaxAbsCor'
   
   if q == 'Manhattan (q=1)':
     q=1
   else:
     q=2
-    
+  
   generated_design = pyLHD.LA_LHD(n=N,k=k,m=m,criteria=criteria,
-                                  N=it,q=q,p=p,maxtime=10)   
-elif  design_type == 'Good Lattice Point Design':
+                                  N=it,q=q,p=p,maxtime=10)
+  
+elif design_type == 'Good Lattice Point Design':
   gendesign.markdown('<p style="color:#F64167;">Generate a (N by k) good lattice point design</p>',
                      unsafe_allow_html=True)
   gendesign.markdown('Note: k must be less than N')
   N = gendesign.number_input('Select number of rows: (N)',value=4,min_value=2)
   k = gendesign.number_input('Select number of columns: (k)',value=2,min_value=2)
-  
+  criteria = gendesign.selectbox('Choose Criteria:',
+                                  options= criteria_options )  
+    
   wt = gendesign.checkbox('Apply Williams Transformation')
+  
   if wt:
     baseline_wt = gendesign.number_input('Select baseline for Williams Transformation',value=1,
                                         min_value=0)
@@ -75,13 +85,16 @@ elif  design_type == 'Good Lattice Point Design':
   else:
     generated_design = pyLHD.GLPdesign(N,k)
 
-elif  design_type == 'Orthogonal LHD (Butler 2001)':
+elif design_type == 'Orthogonal LHD (Butler 2001)':
   gendesign.markdown('<p style="color:#F64167;">Generate an orthogonal LHD based on Butler 2001 construction</p>',
                      unsafe_allow_html=True)  
   N = gendesign.number_input('An odd prime number that is greater than or equal to 3 (N)',value=5,min_value=3,step=2)
   k = gendesign.number_input('A positive integer that is smaller than or equal to (N-1)',value=2,min_value=2)
   
   wt = gendesign.checkbox('Apply Williams Transformation')
+  criteria = gendesign.selectbox('Choose Criteria:',
+                                  options= criteria_options ) 
+       
   if wt:
     baseline_wt = gendesign.number_input('Select baseline for Williams Transformation',value=1,
                                         min_value=0)
@@ -94,7 +107,9 @@ elif  design_type == 'Orthogonal LHD (Cioppa/Lucas 2007)':
                      unsafe_allow_html=True)
   gendesign.markdown('Design will have the following run size: $n=2^m+1$ and the following factor size: $k=m+{m-1 \\choose 2}$')
   m = gendesign.number_input('Select a positive integer (m)',value=2,min_value=2)
-
+  criteria = gendesign.selectbox('Choose Criteria:',
+                                 options= criteria_options )
+      
   wt = gendesign.checkbox('Apply Williams Transformation')
   if wt:
     baseline_wt = gendesign.number_input('Select baseline for Williams Transformation',value=1,
@@ -110,7 +125,9 @@ elif  design_type == 'Orthogonal LHD (Sun et al. 2010)':
   C = gendesign.number_input('Select a positive integer (C)',value=5,min_value=1)
   r = gendesign.number_input('Select a positive integer (r)',value=2,min_value=1)
   type = gendesign.selectbox('Choose type:', ('even','odd') )
-  
+  criteria = gendesign.selectbox('Choose Criteria:',
+                                  options= criteria_options )
+      
   wt = gendesign.checkbox('Apply Williams Transformation')
   if wt:
     baseline_wt = gendesign.number_input('Select baseline for Williams Transformation',value=1,
@@ -124,7 +141,9 @@ elif  design_type == 'Orthogonal LHD (Ye 1998)':
                      unsafe_allow_html=True)
   gendesign.markdown('Design will have the following run size: $n=2^m+1$ and the following factor size: $k=2m-2$')
   m = gendesign.number_input('Select a positive integer (m)',value=2,min_value=2)
-
+  criteria = gendesign.selectbox('Choose Criteria:',
+                                  options= criteria_options )
+      
   wt = gendesign.checkbox('Apply Williams Transformation')
   if wt:
     baseline_wt = gendesign.number_input('Select baseline for Williams Transformation',value=1,
@@ -141,7 +160,9 @@ elif design_type == 'Orthogonal LHD (Lin et al. 2009)':
   gendesign.markdown('After correct input of OLHD and OA, resulting design will have the following run size: $n^2$ and the following factor size: $2fp$')
   OLHD = gendesign.file_uploader('Upload an orthogonal Latin hypercube design (OLHD)')
   OA = gendesign.file_uploader('Upload an orthogonal array (OA)')
-  
+  criteria = gendesign.selectbox('Choose Criteria:',
+                                  options= criteria_options )
+        
   if OLHD is not None and OA is not None:
     wt = gendesign.checkbox('Apply Williams Transformation')
     if wt:
@@ -154,10 +175,7 @@ elif design_type == 'Orthogonal LHD (Lin et al. 2009)':
 submit_button = gendesign.form_submit_button(label='Generate Design')
 
 if submit_button:
-  col1,col2 = st.columns(2)
-  with col1:
-    st.dataframe(pandas_design(generated_design).style.format("{:3}"))
-  with col2:
-    criteria_table(generated_design)
+  print_criteria(generated_design,criteria=criteria)
+  st.dataframe(pandas_design(generated_design).style.format("{:3}"))
   design_txt_download(pandas_design(generated_design))
   design_csv_download(pandas_design(generated_design))
