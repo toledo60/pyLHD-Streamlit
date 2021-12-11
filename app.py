@@ -175,7 +175,7 @@ elif design_type == 'Orthogonal LHD (Lin et al. 2009)':
 submit_button = gendesign.form_submit_button(label='Generate Design')
 
 if submit_button:
-  print_criteria(generated_design,criteria=criteria)
+  print_criteria(generated_design,criteria,p=15,q=1)
   st.dataframe(pandas_design(generated_design).style.format("{:3}"))
   
   design_txt_download(pandas_design(generated_design))
