@@ -17,18 +17,11 @@ def app():
   st.sidebar.markdown('[Check out pyLHD on Github](https://github.com/toledo60/pyLHD)')
   gendesign = st.form(key = 'gendesign')
 
-  criteria_options = ['Average Absolute Correlation', 'Centered L2 Discrepancy',
-                      'L2 Discrepancy', 'L2 Star Discrepancy', 'Maximum Absolute Correlation',
-                      'Maximum Projection Criterion', 'mixture L2 Discrepancy', 'modified L2 Discrepancy',
-                      'phi_p', 'symmetric L2 Discrepancy', 'wrap-around L2 Discrepancy']
-
   if design_type == 'Random Latin Hypercube Design':
     gendesign.markdown('<p style="color:#F64167;">Generate a random (N by k) Latin hypercube design</p>',
                       unsafe_allow_html=True)
     N = gendesign.number_input('Select number of rows: (N)',value=2,min_value=2)
     k = gendesign.number_input('Select number of columns: (k)',value=2,min_value=2)
-    criteria = gendesign.selectbox('Choose Criteria:',
-                                    options= criteria_options )
       
     wt = gendesign.checkbox('Apply Williams Transformation')
     
@@ -81,8 +74,6 @@ def app():
     gendesign.markdown('Note: k must be less than N')
     N = gendesign.number_input('Select number of rows: (N)',value=4,min_value=2)
     k = gendesign.number_input('Select number of columns: (k)',value=2,min_value=2)
-    criteria = gendesign.selectbox('Choose Criteria:',
-                                    options= criteria_options )  
       
     wt = gendesign.checkbox('Apply Williams Transformation')
     
@@ -100,8 +91,6 @@ def app():
     k = gendesign.number_input('A positive integer that is smaller than or equal to (N-1)',value=2,min_value=2)
     
     wt = gendesign.checkbox('Apply Williams Transformation')
-    criteria = gendesign.selectbox('Choose Criteria:',
-                                    options= criteria_options ) 
         
     if wt:
       baseline_wt = gendesign.number_input('Select baseline for Williams Transformation',value=1,
@@ -115,8 +104,6 @@ def app():
                       unsafe_allow_html=True)
     gendesign.markdown('Design will have the following run size: $n=2^m+1$ and the following factor size: $k=m+{m-1 \\choose 2}$')
     m = gendesign.number_input('Select a positive integer (m)',value=2,min_value=2)
-    criteria = gendesign.selectbox('Choose Criteria:',
-                                  options= criteria_options )
         
     wt = gendesign.checkbox('Apply Williams Transformation')
     if wt:
@@ -133,8 +120,6 @@ def app():
     C = gendesign.number_input('Select a positive integer (C)',value=5,min_value=1)
     r = gendesign.number_input('Select a positive integer (r)',value=2,min_value=1)
     type = gendesign.selectbox('Choose type:', ('even','odd') )
-    criteria = gendesign.selectbox('Choose Criteria:',
-                                    options= criteria_options )
         
     wt = gendesign.checkbox('Apply Williams Transformation')
     if wt:
@@ -149,8 +134,6 @@ def app():
                       unsafe_allow_html=True)
     gendesign.markdown('Design will have the following run size: $n=2^m+1$ and the following factor size: $k=2m-2$')
     m = gendesign.number_input('Select a positive integer (m)',value=2,min_value=2)
-    criteria = gendesign.selectbox('Choose Criteria:',
-                                    options= criteria_options )
         
     wt = gendesign.checkbox('Apply Williams Transformation')
     if wt:
@@ -168,8 +151,6 @@ def app():
     gendesign.markdown('After correct input of OLHD and OA, resulting design will have the following run size: $n^2$ and the following factor size: $2fp$')
     OLHD = gendesign.file_uploader('Upload an orthogonal Latin hypercube design (OLHD)')
     OA = gendesign.file_uploader('Upload an orthogonal array (OA)')
-    criteria = gendesign.selectbox('Choose Criteria:',
-                                    options= criteria_options )
           
     if OLHD is not None and OA is not None:
       wt = gendesign.checkbox('Apply Williams Transformation')
@@ -183,8 +164,14 @@ def app():
   submit_button = gendesign.form_submit_button(label='Generate Design')
 
   if submit_button:
-    print_criteria(generated_design,criteria,p=15,q=1)
     st.dataframe(pandas_design(generated_design).style.format("{:3}"))
     
-    design_txt_download(pandas_design(generated_design))
-    design_csv_download(pandas_design(generated_design))
+    df = design_df(generated_design)
+    name = csv_name(generated_design)
+    st.download_button(
+      label="Download Design as CSV",
+      data=df,
+      file_name= f'{name}_{generated_design.shape[0]}by{generated_design.shape[1]}.csv',
+      mime='text/csv'
+      )
+
