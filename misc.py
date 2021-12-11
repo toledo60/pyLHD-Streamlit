@@ -64,8 +64,8 @@ def print_criteria(design,criteria,p=15,q=1):
     result = pyLHD.discrepancy(design,'wrap_around_L2')
   elif criteria == 'Centered L2 Discrepancy':
     result =  pyLHD.discrepancy(design)
-  return st.markdown(f'<p style="color:#F64167;">The {criteria} of this design: {result} </p>',
-                     unsafe_allow_html=True)
+  st.markdown(f'<p style="color:#F64167;">The {criteria} of this design: {result} </p>',
+              unsafe_allow_html=True)
   
   
 
