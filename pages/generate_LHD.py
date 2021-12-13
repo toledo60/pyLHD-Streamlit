@@ -167,11 +167,10 @@ def app():
     st.dataframe(pandas_design(generated_design).style.format("{:3}"))
     
     df = design_df(generated_design)
-    name = csv_name(generated_design)
     st.download_button(
       label="Download Design as CSV",
       data=df,
-      file_name= f'{name}_{generated_design.shape[0]}by{generated_design.shape[1]}.csv',
+      file_name= f'design_{generated_design.shape[0]}by{generated_design.shape[1]}.csv',
       mime='text/csv'
       )
 

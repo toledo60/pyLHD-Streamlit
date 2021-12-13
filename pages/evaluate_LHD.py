@@ -3,9 +3,10 @@ from pages.misc import *
 
 def app():  
   criteria_options = ['Average Absolute Correlation', 'Centered L2 Discrepancy',
-                    'L2 Discrepancy', 'L2 Star Discrepancy', 'Maximum Absolute Correlation',
-                    'Maximum Projection Criterion', 'mixture L2 Discrepancy', 'modified L2 Discrepancy',
-                    'phi_p', 'symmetric L2 Discrepancy', 'wrap-around L2 Discrepancy']
+                      'coverage','L2 Discrepancy', 'L2 Star Discrepancy', 'maximin',
+                      'Maximum Absolute Correlation','Maximum Projection Criterion', 
+                      'mixture L2 Discrepancy','meshratio','modified L2 Discrepancy',
+                      'phi_p', 'symmetric L2 Discrepancy', 'wrap-around L2 Discrepancy']
   
   uploaded_file = st.sidebar.file_uploader("Choose a file")
   st.sidebar.markdown('[Check out pyLHD on Github](https://github.com/toledo60/pyLHD)')

@@ -38,22 +38,16 @@ def print_criteria(design,criteria,p=15,q=1):
     result = pyLHD.discrepancy(design,'wrap_around_L2')
   elif criteria == 'Centered L2 Discrepancy':
     result =  pyLHD.discrepancy(design)
+  elif criteria == 'maximin':
+    result = pyLHD.maximin(design)
+  elif criteria == 'meshratio':
+    result = pyLHD.mesh_ratio(design)
+  elif criteria == 'coverage':
+    result = pyLHD.coverage(design)
     
   st.markdown(f'<p style="color:#F64167;">The {criteria} of this design: {result} </p>',
               unsafe_allow_html=True)
-  
-
-def csv_name(design_type):
-  if design_type == 'Random Latin Hypercube Design':
-    name = 'LHD'
-  elif design_type =='Lioness Algorithm for LHD':
-    name = 'LHD'
-  elif design_type == 'Good Lattice Point Design':
-    name = 'GLPD'
-  else:
-    name = 'OLHD'
-  return name
-  
+    
 
 # Define the multipage class to manage the multiple apps in our program 
 class MultiPage: 
